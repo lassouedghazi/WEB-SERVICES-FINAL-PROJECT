@@ -1,0 +1,85 @@
+/* help.css */
+
+.help-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #f5f5f5;
+    padding: 50px 20px;
+    position: relative;
+    color: #fff;
+    margin-left: 0%;
+}
+
+.help-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+    margin: 20px 0;
+    border-bottom: 3px solid #ff6f00;
+    padding-bottom: 10px;
+}
+
+.intro-text {
+    font-size: 1.2em;
+    max-width: 800px;
+    margin: 0 auto 30px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.problem-section {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.problem-section:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.problem-title {
+    font-size: 1.8em;
+    color: #333;
+    margin-bottom: 10px;
+    border-left: 5px solid #ff6f00;
+    padding-left: 10px;
+}
+
+.problem-text {
+    font-size: 1em;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .help-container {
+        margin: 20px auto;
+        padding: 20px 10px;
+    }
+
+    .title {
+        font-size: 2em;
+    }
+
+    .intro-text, .problem-text {
+        font-size: 1em;
+    }
+
+    .problem-title {
+        font-size: 1.5em;
+    }
+}
