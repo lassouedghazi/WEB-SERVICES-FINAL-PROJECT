@@ -1,12 +1,11 @@
-// TechnicalGlitches.js
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button } from '@mui/material';
 import axios from 'axios';
-import './TechnicalGlitches.css'; // Import the CSS file for styling
+import './TechnicalGlitches.css'; 
 
 const TechnicalGlitches = () => {
     const [deviceId, setDeviceId] = useState('');
-    const [issueType, setIssueType] = useState(''); // e.g., "Double Deduction"
+    const [issueType, setIssueType] = useState(''); 
     const [description, setDescription] = useState('');
     const [message, setMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -26,7 +25,7 @@ const TechnicalGlitches = () => {
 
             setMessage(response.data.message);
             setErrorMessage('');
-            // Clear input fields after successful submission
+            
             setDeviceId('');
             setIssueType('');
             setDescription('');

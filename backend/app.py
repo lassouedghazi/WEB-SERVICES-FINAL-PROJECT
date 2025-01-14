@@ -1,4 +1,3 @@
-# app.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -10,21 +9,21 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-# Apply configuration from config.py
+
 app.config.from_object(Config)
 
-# Initialize the database with SQLAlchemy
+
 db.init_app(app)
 
-# Initialize JWT Manager
+
 jwt = JWTManager(app)
 
-# Home Route
+
 @app.route('/')
 def home():
     return jsonify({"message": "Welcome"})
 
-# Register Route
+
 @app.route('/register', methods=['POST'])
 def register():
     try:
@@ -34,19 +33,19 @@ def register():
         password = data['password']
         confirm_password = data['confirm_password']
 
-        # Check if passwords match
+        
         if password != confirm_password:
             return jsonify({"error": "Passwords do not match!"}), 400
 
-        # Hash the password
+        
         hashed_password = generate_password_hash(password)
 
-        # Check if the email already exists using SQLAlchemy
+        
         user = User.query.filter_by(email=email).first()
         if user:
             return jsonify({"error": "Email already exists!"}), 400
 
-        # Create a new user and add to the database
+       
         new_user = User(username=username, email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
@@ -56,7 +55,7 @@ def register():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Login Route
+
 @app.route('/login', methods=['POST'])
 def login():
     try:
@@ -64,11 +63,11 @@ def login():
         email = data['email']
         password = data['password']
 
-        # Check if user exists using SQLAlchemy
+        
         user = User.query.filter_by(email=email).first()
 
         if user and check_password_hash(user.password, password):
-            # Create JWT Token
+            
             access_token = create_access_token(identity=user.email)
             return jsonify({"access_token": access_token}), 200
         else:
@@ -77,14 +76,14 @@ def login():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Profile Route (GET) - Fetch user profile
+
 @app.route('/profile', methods=['GET'])
 @jwt_required()
 def get_profile():
     try:
         current_user_email = get_jwt_identity()
         
-        # Fetch the user from the database
+        
         user = User.query.filter_by(email=current_user_email).first()
 
         if not user:
@@ -99,7 +98,7 @@ def get_profile():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Lost Device Reporting Route
+
 @app.route('/report-lost-device', methods=['POST'])
 @jwt_required()
 def report_lost_device():
@@ -107,7 +106,7 @@ def report_lost_device():
         current_user_email = get_jwt_identity()
         data = request.get_json()
 
-        # Validate input
+        
         required_fields = ['device_id', 'first_name', 'last_name', 'national_id', 'description']
         
         for field in required_fields:
@@ -136,16 +135,16 @@ def report_lost_device():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Route to report technical glitches
+
 @app.route('/report-technical-glitch', methods=['POST'])
 @jwt_required()
 def report_technical_glitch():
     try:
         data = request.get_json()
         
-        user_id = get_jwt_identity()  # Get current user's ID from JWT
+        user_id = get_jwt_identity()  
 
-        # Validate input data
+       
         device_id = data.get('device_id')
         issue_type = data.get('issue_type')
         description = data.get('description')
@@ -153,7 +152,7 @@ def report_technical_glitch():
         if not device_id or not issue_type or not description:
             return jsonify({"error": "All fields are required."}), 400
 
-        # Create a new technical glitch report
+        
         new_report = TechnicalGlitch(
             user_id=user_id,
             device_id=device_id,
@@ -169,31 +168,30 @@ def report_technical_glitch():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Route to report unauthorized cars
+
 @app.route('/report-unauthorized-car', methods=['POST'])
 @jwt_required()
 def report_unauthorized_car():
     try:
         data = request.get_json()
         
-        user_id = get_jwt_identity()  # Get current user's ID from JWT
+        user_id = get_jwt_identity()  
 
-        # Validate input data
+       
         vehicle_id = data.get('vehicle_id')
         description = data.get('description')
-        location = data.get('location')  # Required: where the incident occurred
-        timestamp = data.get('timestamp')  # Optional: time of the incident
+        location = data.get('location')  
+        timestamp = data.get('timestamp')  
 
         if not vehicle_id or not description or not location:
             return jsonify({"error": "Vehicle ID, description, and location are required."}), 400
         
-        # Convert timestamp string to datetime object if provided
         if timestamp:
-            timestamp = datetime.fromisoformat(timestamp)  # Convert string to datetime object
+            timestamp = datetime.fromisoformat(timestamp)  
         else:
-            timestamp = datetime.utcnow()  # Use current time if not provided
+            timestamp = datetime.utcnow() 
 
-        # Create a new unauthorized car report
+        
         new_report = UnauthorizedCarReport(
             user_id=user_id,
             vehicle_id=vehicle_id,
