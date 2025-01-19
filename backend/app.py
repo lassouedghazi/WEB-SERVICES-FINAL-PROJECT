@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-from backend.models import db, User, LostDeviceReport, TechnicalGlitch, UnauthorizedCarReport  # Import all necessary models
+from backend.models import db, User, LostDeviceReport, TechnicalGlitch, UnauthorizedCarReport  
 from backend.config import Config
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
